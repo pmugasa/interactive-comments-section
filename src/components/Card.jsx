@@ -1,3 +1,5 @@
+import Reply from "./Reply";
+
 function Card({ comment }) {
   return (
     <>
@@ -7,6 +9,7 @@ function Card({ comment }) {
           <p className="font-bold text-gray-600 text-md">
             {comment.user.username}
           </p>
+
           <p className="text-gray-400 font-semibold">{comment.createdAt}</p>
         </div>
         <p className="mt-4 font-semibold text-gray-400">{comment.content}</p>
@@ -29,6 +32,14 @@ function Card({ comment }) {
           </div>
         </div>
       </div>
+      {comment.replies.length > 0
+        ? comment.replies.map((reply) => (
+            <div className="flex ">
+              <div className="border-l-2 border-gray-150 p-6 "></div>
+              <Reply key={reply.id} reply={reply} />
+            </div>
+          ))
+        : null}
     </>
   );
 }

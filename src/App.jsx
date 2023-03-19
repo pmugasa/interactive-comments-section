@@ -4,31 +4,37 @@ import { useState, useEffect } from "react";
 
 function App() {
   //import data from the data json
-  let [data, setData] = useState([]);
+  const [data, setData] = useState([]);
+  let comments = data.comments;
 
   useEffect(() => {
     async function fetchData() {
       try {
         const result = await axios.get("http://localhost:5173/src/data.json");
-        setData(result.data.comments);
+
+        setData(result.data);
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-    data == undefined ? fetchData() : null;
   }, []);
-  data ? console.log("we have data", data) : console.log("no data");
+  console.log("comments", comments[1].user);
+  console.log("replies", comments[1].replies[1].user);
 
-  return (
-    <>
-      <div className="h-screen p-8 bg-background">
-        {data.map((comment) => (
-          <Card key={comment.id} comment={comment} />
-        ))}
-      </div>
-    </>
-  );
+  if (!comments) {
+    return <div>Loading...</div>;
+  } else {
+    return (
+      <>
+        <div className="h-full p-8 bg-background">
+          {comments.map((comment) => (
+            <Card key={comment.id} user={data.currentUser} comment={comment} />
+          ))}
+        </div>
+      </>
+    );
+  }
 }
 
 export default App;
