@@ -1,18 +1,16 @@
 import Reply from "./Reply";
 
-function Card({ comment }) {
+function Card({ comment, currentUser }) {
   return (
     <>
-      <div className="h-fit w-full border-2 border-gray-100 shadow-sm bg-white mt-4 rounded-md p-8">
-        <div className="flex items-center space-x-4">
-          <img src={comment.user.image.webp} className="h-10 w-10" />
-          <p className="font-bold text-gray-600 text-md">
-            {comment.user.username}
-          </p>
+      <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
+        <div className="flex items-center space-x-3">
+          <img src={comment.user.image.webp} className="h-6 w-6" />
+          <p className="font-bold  text-gray-600 ">{comment.user.username}</p>
 
-          <p className="text-gray-400 font-semibold">{comment.createdAt}</p>
+          <p className="text-gray-400">{comment.createdAt}</p>
         </div>
-        <p className="mt-4 font-semibold text-gray-400">{comment.content}</p>
+        <p className="mt-4  text-gray-400 text-base">{comment.content}</p>
         <div className="flex mt-4">
           <div className="flex space-x-4">
             <button>
@@ -32,14 +30,13 @@ function Card({ comment }) {
           </div>
         </div>
       </div>
-      {comment.replies.length > 0
-        ? comment.replies.map((reply) => (
-            <div className="flex ">
-              <div className="border-l-2 border-gray-150 p-6 "></div>
-              <Reply key={reply.id} reply={reply} />
-            </div>
-          ))
-        : null}
+      <div className="pl-4 mt-4 border-l-2 border-gray-150">
+        {comment.replies.length > 0
+          ? comment.replies.map((reply) => (
+              <Reply key={reply.id} reply={reply} currentUser={currentUser} />
+            ))
+          : null}{" "}
+      </div>
     </>
   );
 }

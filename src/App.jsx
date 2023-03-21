@@ -1,4 +1,5 @@
 import Card from "./components/Card";
+import CommentInput from "./components/CommentInput";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -6,6 +7,7 @@ function App() {
   //import data from the data json
   const [data, setData] = useState([]);
   let comments = data.comments;
+  const currentUser = data.currentUser;
 
   useEffect(() => {
     async function fetchData() {
@@ -19,18 +21,21 @@ function App() {
     }
     fetchData();
   }, []);
-  console.log("comments", comments[1].user);
-  console.log("replies", comments[1].replies[1].user);
 
   if (!comments) {
     return <div>Loading...</div>;
   } else {
     return (
       <>
-        <div className="h-full p-8 bg-background">
+        <div className="h-full p-4 bg-background font-rubik">
           {comments.map((comment) => (
-            <Card key={comment.id} user={data.currentUser} comment={comment} />
+            <Card
+              key={comment.id}
+              currentUser={currentUser}
+              comment={comment}
+            />
           ))}
+          <CommentInput currentUser={currentUser} />
         </div>
       </>
     );
