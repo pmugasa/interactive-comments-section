@@ -46,6 +46,15 @@ function App() {
     console.log("comment:", comments);
   }
 
+  function deleteComment(id) {
+    const updatedComments = comments.filter((comment) => comment.id !== id);
+    setComments(updatedComments);
+  }
+
+  function deleteReply(id) {
+    const updatedReplies = replies.filter((reply) => reply.id !== id);
+    setReplies(updatedReplies);
+  }
   return (
     <>
       <div className="h-full p-4 bg-background font-rubik">
@@ -58,6 +67,7 @@ function App() {
                 key={comment.id}
                 currentUser={currentUser}
                 comment={comment}
+                deleteComment={deleteComment}
               />
             ))}
             <CommentInput

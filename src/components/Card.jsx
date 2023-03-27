@@ -1,6 +1,7 @@
 import Reply from "./Reply";
+import ButtonIcon from "./ButtonIcon";
 
-function Card({ comment, currentUser }) {
+function Card({ comment, currentUser, deleteComment }) {
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -23,10 +24,28 @@ function Card({ comment, currentUser }) {
             </button>
           </div>
           <div className=" ml-auto">
-            <button className="flex items-center justify-center space-x-2">
-              <img src="src\assets\icon-reply.svg" />
-              <span className="font-semibold text-purple">Reply</span>
-            </button>
+            {comment.user.username === currentUser.username ? (
+              <div className="flex space-x-4 text-base">
+                <ButtonIcon
+                  onClick={() => deleteComment(comment.id)}
+                  className="text-softRed"
+                >
+                  <img src="src\assets\icon-delete.svg" />
+                  <span className="font-semibold ">Delete</span>
+                </ButtonIcon>
+                <ButtonIcon className=" text-purple">
+                  <img src="src\assets\icon-edit.svg" />
+                  <span className="font-semibold  ">Edit</span>
+                </ButtonIcon>
+              </div>
+            ) : (
+              <ButtonIcon>
+                <img src="src\assets\icon-reply.svg" />
+                <span className="font-semibold text-purple text-base">
+                  Reply
+                </span>
+              </ButtonIcon>
+            )}
           </div>
         </div>
       </div>
