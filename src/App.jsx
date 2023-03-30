@@ -8,6 +8,7 @@ function App() {
   const [comments, setComments] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [comment, setComment] = useState("");
+  const [editingComment, setEditingComment] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -46,9 +47,27 @@ function App() {
     console.log("comment:", comments);
   }
 
+  //delete user comments
   function deleteComment(id) {
     const updatedComments = comments.filter((comment) => comment.id !== id);
     setComments(updatedComments);
+  }
+
+  //edit user comments
+  function handleEditComment(c) {
+    setEditingComment(c);
+  }
+  console.log("editing comment", editingComment);
+  function updateComment() {
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === editingComment.id) {
+        return { ...comment, content: editingComment.content };
+      } else {
+        return comment;
+      }
+    });
+    setComments(updatedComments);
+    setEditingComment(null);
   }
 
   function deleteReply(id) {
@@ -68,6 +87,11 @@ function App() {
                 currentUser={currentUser}
                 comment={comment}
                 deleteComment={deleteComment}
+                handleEditComment={handleEditComment}
+                editingComment={editingComment}
+                setEditingComment={setEditingComment}
+                updateComment={updateComment}
+                setComment={setComment}
               />
             ))}
             <CommentInput

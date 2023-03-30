@@ -1,7 +1,16 @@
 import Reply from "./Reply";
 import ButtonIcon from "./ButtonIcon";
+import Button from "./Button";
 
-function Card({ comment, currentUser, deleteComment }) {
+function Card({
+  comment,
+  currentUser,
+  deleteComment,
+  editingComment,
+  updateComment,
+  handleEditComment,
+  setEditingComment,
+}) {
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -11,7 +20,28 @@ function Card({ comment, currentUser, deleteComment }) {
 
           <p className="text-gray-400">{comment.createdAt}</p>
         </div>
-        <p className="mt-4  text-gray-400 text-base">{comment.content}</p>
+
+        {editingComment && editingComment.id === comment.id ? (
+          <div>
+            <input
+              value={editingComment.content}
+              onChange={(e) =>
+                setEditingComment({
+                  ...editingComment,
+                  content: e.target.value,
+                })
+              }
+              type="text"
+              className=" text-base mt-4 border-2 border-gray-200 h-28 w-full rounded-lg p-2 font-rubik text-gray-400 focus:outline-purple"
+            />
+            <Button onClick={updateComment} className="mt-2">
+              Update
+            </Button>
+          </div>
+        ) : (
+          <p className="mt-4  text-gray-400 text-base">{comment.content}</p>
+        )}
+
         <div className="flex mt-4">
           <div className="flex space-x-4">
             <button>
@@ -33,7 +63,11 @@ function Card({ comment, currentUser, deleteComment }) {
                   <img src="src\assets\icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </ButtonIcon>
-                <ButtonIcon className=" text-purple">
+                <ButtonIcon
+                  disabled={editingComment}
+                  className=" text-purple"
+                  onClick={() => handleEditComment(comment)}
+                >
                   <img src="src\assets\icon-edit.svg" />
                   <span className="font-semibold  ">Edit</span>
                 </ButtonIcon>
