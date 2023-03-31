@@ -1,4 +1,10 @@
-function Reply({ reply, currentUser, upVote, downVoteReply, upVoteReply }) {
+function Reply({
+  reply,
+  currentUser,
+  deleteReply,
+  downVoteReply,
+  upVoteReply,
+}) {
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -39,7 +45,10 @@ function Reply({ reply, currentUser, upVote, downVoteReply, upVoteReply }) {
           <div className=" ml-auto">
             {reply.user.username === currentUser.username ? (
               <div className="flex space-x-4 text-base">
-                <button className="flex items-center justify-center text-softRed space-x-2">
+                <button
+                  onClick={() => deleteReply(reply.id)}
+                  className="flex items-center justify-center text-softRed space-x-2"
+                >
                   <img src="src\assets\icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </button>

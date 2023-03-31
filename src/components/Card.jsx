@@ -44,6 +44,12 @@ function Card({
     setReplies(updatedReplies);
   }
 
+  //delete reply
+  function deleteReply(id) {
+    const updatedReplies = replies.filter((reply) => reply.id !== id);
+    setReplies(updatedReplies);
+  }
+
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -126,6 +132,7 @@ function Card({
                 upVote={upVote}
                 downVoteReply={downVoteReply}
                 upVoteReply={upVoteReply}
+                deleteReply={deleteReply}
               />
             ))
           : null}
