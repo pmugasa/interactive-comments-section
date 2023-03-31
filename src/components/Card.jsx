@@ -10,6 +10,7 @@ function Card({
   updateComment,
   handleEditComment,
   setEditingComment,
+  getTimeAgo,
 }) {
   return (
     <>
@@ -18,7 +19,7 @@ function Card({
           <img src={comment.user.image.webp} className="h-6 w-6" />
           <p className="font-bold  text-gray-600 ">{comment.user.username}</p>
 
-          <p className="text-gray-400">{comment.createdAt}</p>
+          <p className="text-gray-400">{getTimeAgo(comment.createdAt)}</p>
         </div>
 
         {editingComment && editingComment.id === comment.id ? (

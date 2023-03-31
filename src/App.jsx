@@ -24,9 +24,25 @@ function App() {
     fetchData();
   }, []);
 
-  // getting value of input
-  console.log(comments);
-  console.log(currentUser);
+  function getTimeAgo(timestamp) {
+    const now = Date.now();
+    const seconds = Math.floor((now - timestamp) / 1000);
+
+    if (seconds < 60) {
+      return `just now`;
+    } else if (seconds < 3600) {
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes} minutes ago`;
+    } else if (seconds < 86400) {
+      const hours = Math.floor(seconds / 3600);
+      return `${hours} hours ago`;
+    } else {
+      const days = Math.floor(seconds / 86400);
+      return `${days} days ago`;
+    }
+  }
+  const currentTimeStamp = Date.now();
+
   //function add comments
   function addComment(e) {
     e.preventDefault();
@@ -37,7 +53,7 @@ function App() {
       {
         id: comments.length + 1,
         content: comment,
-        createdAt: "1 minute ago",
+        createdAt: Date.now(),
         score: 2,
         user: currentUser,
         replies: [],
@@ -92,6 +108,7 @@ function App() {
                 setEditingComment={setEditingComment}
                 updateComment={updateComment}
                 setComment={setComment}
+                getTimeAgo={getTimeAgo}
               />
             ))}
             <CommentInput
