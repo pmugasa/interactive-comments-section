@@ -16,6 +16,7 @@ function Card({
   downVote,
 }) {
   const [replies, setReplies] = useState(comment.replies);
+  const [editingReply, setEditingReply] = useState(null);
 
   //downvoting Reply
   function downVoteReply(id) {
@@ -48,6 +49,24 @@ function Card({
   function deleteReply(id) {
     const updatedReplies = replies.filter((reply) => reply.id !== id);
     setReplies(updatedReplies);
+  }
+
+  //edit user comments
+  function handleEditReply(r) {
+    setEditingReply(r);
+  }
+  console.log("edited reply", editingReply);
+  //update edited comment
+  function updateReply() {
+    const updatedReplies = replies.map((reply) => {
+      if (reply.id === editingReply.id) {
+        return { ...reply, content: editingReply.content };
+      } else {
+        return reply;
+      }
+    });
+    setReplies(updatedReplies);
+    setEditingReply(null);
   }
 
   return (
@@ -133,6 +152,11 @@ function Card({
                 downVoteReply={downVoteReply}
                 upVoteReply={upVoteReply}
                 deleteReply={deleteReply}
+                handleEditReply={handleEditReply}
+                setEditingComment={setEditingReply}
+                editingReply={editingReply}
+                setEditingReply={setEditingReply}
+                updateReply={updateReply}
               />
             ))
           : null}

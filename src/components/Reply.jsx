@@ -1,9 +1,15 @@
+import Button from "./Button";
+
 function Reply({
   reply,
   currentUser,
   deleteReply,
   downVoteReply,
   upVoteReply,
+  handleEditReply,
+  setEditingReply,
+  editingReply,
+  updateReply,
 }) {
   return (
     <>
@@ -21,14 +27,33 @@ function Reply({
 
           <p className="text-gray-400 ">{reply.createdAt}</p>
         </div>
-        <p className="mt-4 text-gray-400 text-base">
+        <div className="mt-4 text-gray-400 text-base">
           {reply.replyingTo ? (
             <span className="font-bold text-purple mr-1">
               @{reply.replyingTo}
             </span>
           ) : null}
-          {reply.content}
-        </p>
+          {editingReply && editingReply.id === reply.id ? (
+            <div>
+              <input
+                value={editingReply.content}
+                onChange={(e) =>
+                  setEditingReply({
+                    ...editingReply,
+                    content: e.target.value,
+                  })
+                }
+                type="text"
+                className=" text-base mt-4 border-2 border-gray-200 h-28 w-full rounded-lg p-2 font-rubik text-gray-400 focus:outline-purple"
+              />
+              <Button onClick={() => updateReply(reply.id)} className="mt-2">
+                Update
+              </Button>
+            </div>
+          ) : (
+            <p className="mt-4  text-gray-400 text-base">{reply.content}</p>
+          )}
+        </div>
         <div className="flex mt-4">
           <div className="flex space-x-4">
             <button onClick={() => downVoteReply(reply.id)}>
@@ -52,7 +77,10 @@ function Reply({
                   <img src="src\assets\icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </button>
-                <button className="flex items-center justify-center  text-purple space-x-2">
+                <button
+                  onClick={() => handleEditReply(reply)}
+                  className="flex items-center justify-center  text-purple space-x-2"
+                >
                   <img src="src\assets\icon-edit.svg" />
                   <span className="font-semibold  ">Edit</span>
                 </button>
