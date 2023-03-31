@@ -9,8 +9,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
-  const [upVoteComment, setUpVoteComment] = useState(comment.score);
 
+  //fetching comments from the server
   useEffect(() => {
     async function fetchData() {
       try {
@@ -29,8 +29,7 @@ function App() {
   function upVote(id) {
     const updatedComments = comments.map((comment) => {
       if (comment.id === id) {
-        console.log("comment score", comment.score++);
-        return { ...comment, score: comment.score++ };
+        return { ...comment, score: comment.score + 1 };
       } else {
         return comment;
       }
@@ -38,11 +37,12 @@ function App() {
     setComments(updatedComments);
   }
 
-  //downvoting
+  //downvoting comment
   function downVote(id) {
     const updatedComments = comments.map((comment) => {
       if (comment.id === id) {
         if (comment.score > 0) {
+          console.log("score", comment.score);
           return { ...comment, score: comment.score - 1 };
         }
         return comment;
@@ -71,9 +71,8 @@ function App() {
       return `${days} days ago`;
     }
   }
-  const currentTimeStamp = Date.now();
 
-  //function add comments
+  //add comments
   function addComment(e) {
     e.preventDefault();
     //comment should have the following
@@ -90,7 +89,6 @@ function App() {
       },
     ]);
     setComment("");
-    console.log("comment:", comments);
   }
 
   //delete user comments
@@ -104,6 +102,7 @@ function App() {
     setEditingComment(c);
   }
 
+  //update edited comment
   function updateComment() {
     const updatedComments = comments.map((comment) => {
       if (comment.id === editingComment.id) {
@@ -116,10 +115,6 @@ function App() {
     setEditingComment(null);
   }
 
-  function deleteReply(id) {
-    const updatedReplies = replies.filter((reply) => reply.id !== id);
-    setReplies(updatedReplies);
-  }
   return (
     <>
       <div className="h-full p-4 bg-background font-rubik">

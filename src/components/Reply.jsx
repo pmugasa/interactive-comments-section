@@ -1,4 +1,4 @@
-function Reply({ reply, currentUser }) {
+function Reply({ reply, currentUser, upVote, downVoteReply, upVoteReply }) {
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -25,14 +25,14 @@ function Reply({ reply, currentUser }) {
         </p>
         <div className="flex mt-4">
           <div className="flex space-x-4">
-            <button>
+            <button onClick={() => downVoteReply(reply.id)}>
               <img src="src\assets\icon-minus.svg" />
             </button>
 
             <span className="font-semibold text-purple text-base">
               {reply.score}
             </span>
-            <button>
+            <button onClick={() => upVoteReply(reply.id)}>
               <img src="src\assets\icon-plus.svg" />
             </button>
           </div>
