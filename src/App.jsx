@@ -9,6 +9,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
+  const [upVoteComment, setUpVoteComment] = useState(comment.score);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,6 +25,35 @@ function App() {
     fetchData();
   }, []);
 
+  //upvoting
+  function upVote(id) {
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        console.log("comment score", comment.score++);
+        return { ...comment, score: comment.score++ };
+      } else {
+        return comment;
+      }
+    });
+    setComments(updatedComments);
+  }
+
+  //downvoting
+  function downVote(id) {
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        if (comment.score > 0) {
+          return { ...comment, score: comment.score - 1 };
+        }
+        return comment;
+      } else {
+        return comment;
+      }
+    });
+    setComments(updatedComments);
+  }
+
+  //timestamp function
   function getTimeAgo(timestamp) {
     const now = Date.now();
     const seconds = Math.floor((now - timestamp) / 1000);
@@ -54,7 +84,7 @@ function App() {
         id: comments.length + 1,
         content: comment,
         createdAt: Date.now(),
-        score: 2,
+        score: 0,
         user: currentUser,
         replies: [],
       },
@@ -73,7 +103,7 @@ function App() {
   function handleEditComment(c) {
     setEditingComment(c);
   }
-  console.log("editing comment", editingComment);
+
   function updateComment() {
     const updatedComments = comments.map((comment) => {
       if (comment.id === editingComment.id) {
@@ -109,6 +139,8 @@ function App() {
                 updateComment={updateComment}
                 setComment={setComment}
                 getTimeAgo={getTimeAgo}
+                upVote={upVote}
+                downVote={downVote}
               />
             ))}
             <CommentInput

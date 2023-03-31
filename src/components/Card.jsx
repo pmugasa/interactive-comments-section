@@ -11,6 +11,8 @@ function Card({
   handleEditComment,
   setEditingComment,
   getTimeAgo,
+  upVote,
+  downVote,
 }) {
   return (
     <>
@@ -35,7 +37,7 @@ function Card({
               type="text"
               className=" text-base mt-4 border-2 border-gray-200 h-28 w-full rounded-lg p-2 font-rubik text-gray-400 focus:outline-purple"
             />
-            <Button onClick={updateComment} className="mt-2">
+            <Button onClick={() => updateComment(comment.id)} className="mt-2">
               Update
             </Button>
           </div>
@@ -45,12 +47,12 @@ function Card({
 
         <div className="flex mt-4">
           <div className="flex space-x-4">
-            <button>
+            <button onClick={() => downVote(comment.id)}>
               <img src="src\assets\icon-minus.svg" />
             </button>
 
             <span className="font-semibold text-purple">{comment.score}</span>
-            <button>
+            <button onClick={() => upVote(comment.id)}>
               <img src="src\assets\icon-plus.svg" />
             </button>
           </div>
