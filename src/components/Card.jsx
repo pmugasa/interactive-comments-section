@@ -131,7 +131,7 @@ function Card({
                 </ButtonIcon>
               </div>
             ) : (
-              <ButtonIcon>
+              <ButtonIcon onClick={() => console.log("button clicked")}>
                 <img src="src\assets\icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply

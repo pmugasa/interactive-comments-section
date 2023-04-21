@@ -115,6 +115,25 @@ function App() {
     setEditingComment(null);
   }
 
+  //reply to comment
+  function replyToComment(id) {
+    // need user, timestamp, reply content. id, score
+
+    const updatedReplies = comments.map((comment) => {
+      if (comment.id === id) {
+        return [
+          ...comment.replies,
+          {
+            id: replies.length + 1,
+            content: reply,
+            score: 0,
+            user: user,
+          },
+        ];
+      }
+    });
+  }
+
   return (
     <>
       <div className="h-full p-4 bg-background font-rubik">
