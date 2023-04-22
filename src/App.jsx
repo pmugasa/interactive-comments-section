@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get("http://localhost:5173/src/data.json");
+        const result = await axios.get("./src/data.json");
         setComments(result.data.comments);
         setCurrentUser(result.data.currentUser);
         setIsLoading(false);
@@ -170,7 +170,13 @@ function App() {
                 {comment.id === isReply ? (
                   <ReplyInput
                     currentUser={currentUser}
+                    comment={comment}
+                    setComment={setComment}
                     setIsReply={setIsReply}
+                    getTimeAgo={getTimeAgo}
+                    comments={comments}
+                    setComments={setComments}
+                    isReply={isReply}
                   />
                 ) : null}
               </>

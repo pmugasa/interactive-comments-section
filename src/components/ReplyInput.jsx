@@ -1,14 +1,45 @@
 import { useState } from "react";
 import Button from "./Button";
 
-function ReplyInput({ currentUser, setIsReply }) {
+function ReplyInput({
+  currentUser,
+  setIsReply,
+  comments,
+  isReply,
+  setComments,
+  comment,
+}) {
   const [message, setMessage] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
     setIsReply(null);
-    console.log(message);
+    //id,content, createdAt,score,replyingTo,user, username
+
+    const newReply = {
+      id: comment.replies.length + 1,
+      content: message,
+      createdAt: new Date(),
+      replyingTo: comment.user,
+      user: currentUser,
+      username: currentUser.username,
+    };
+
+    const upDatedComments = comments.map((comment) => {
+      if (comment.id === isReply) {
+        return {
+          ...comment,
+          replies: [...comment.replies, newReply],
+        };
+      } else {
+        return comment;
+      }
+    });
+    setComments(upDatedComments);
+    setIsReply(null);
+    setMessage("");
   }
+  console.log("comment", comment);
 
   return (
     <>

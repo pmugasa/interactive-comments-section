@@ -19,9 +19,8 @@ function Card({
   isReply,
   setIsReply,
 }) {
-  const [replies, setReplies] = useState(comment.replies);
   const [editingReply, setEditingReply] = useState(null);
-
+  const [replies, setReplies] = useState(comment.replies);
   //downvoting Reply
   function downVoteReply(id) {
     const updatedReplies = replies.map((reply) => {
