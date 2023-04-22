@@ -11,6 +11,7 @@ function Reply({
   editingReply,
   updateReply,
   getTimeAgo,
+  showInputReply,
 }) {
   return (
     <>
@@ -87,7 +88,10 @@ function Reply({
                 </button>
               </div>
             ) : (
-              <button className="flex items-center justify-center space-x-2">
+              <button
+                className="flex items-center justify-center space-x-2"
+                onClick={() => showInputReply(reply.id)}
+              >
                 <img src="src\assets\icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply

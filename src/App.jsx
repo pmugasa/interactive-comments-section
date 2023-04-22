@@ -15,6 +15,7 @@ function App() {
   const [content, setContent] = useState("");
   const [editingReply, setEditingReply] = useState(null);
   const [replies, setReplies] = useState(comment.replies);
+  const [showInput, setShowInput] = useState(null);
 
   //fetching comments from the server
   useEffect(() => {
@@ -125,7 +126,7 @@ function App() {
     setIsReply(id);
   }
 
-  //reply to comment
+  //reply to another user comment
   function replyToComment(e) {
     e.preventDefault();
 
@@ -145,11 +146,44 @@ function App() {
         return comment;
       }
     });
-    console.log("updated comments:", updatedComments);
+
     setComments(updatedComments);
     setIsReply(null);
     setContent("");
   }
+
+  //show reply input to reply
+  function showInputReply(id) {
+    console.log(id);
+    setShowInput(id);
+  }
+  //reply to another user reply
+  function replyToReply(e) {
+    e.preventDefault();
+
+    const updatedComments = comments.map((comment) => {
+      comment.replies.map((reply) => {
+        if (reply.id === isReply) {
+          const newReply = {
+            id: comment.replies.length + 1,
+            content: content,
+            score: 0,
+            createdAt: Date.now(),
+            replyingTo: reply.user.username,
+            user: currentUser,
+            username: currentUser.username,
+          };
+          return { ...comment, replies: [...comment.replies, newReply] };
+        } else {
+          return comment;
+        }
+      });
+    });
+    setComments(updatedComments);
+    setIsReply(null);
+    setContent("");
+  }
+
   //downvoting Reply
   function downVoteReply(id) {
     const updatedComments = comments.map((comment) => {
@@ -249,21 +283,32 @@ function App() {
                 <div className="pl-4 mt-4 border-l-2 border-gray-150">
                   {comment.replies.length > 0
                     ? comment.replies.map((reply) => (
-                        <Reply
-                          key={reply.id}
-                          reply={reply}
-                          currentUser={currentUser}
-                          upVote={upVote}
-                          downVoteReply={downVoteReply}
-                          upVoteReply={upVoteReply}
-                          deleteReply={deleteReply}
-                          handleEditReply={handleEditReply}
-                          setEditingComment={setEditingReply}
-                          editingReply={editingReply}
-                          setEditingReply={setEditingReply}
-                          updateReply={updateReply}
-                          getTimeAgo={getTimeAgo}
-                        />
+                        <>
+                          <Reply
+                            key={reply.id}
+                            reply={reply}
+                            currentUser={currentUser}
+                            upVote={upVote}
+                            downVoteReply={downVoteReply}
+                            upVoteReply={upVoteReply}
+                            deleteReply={deleteReply}
+                            handleEditReply={handleEditReply}
+                            setEditingComment={setEditingReply}
+                            editingReply={editingReply}
+                            setEditingReply={setEditingReply}
+                            updateReply={updateReply}
+                            getTimeAgo={getTimeAgo}
+                            showInputReply={showInputReply}
+                          />
+                          {reply.id === showInput ? (
+                            <form
+                              onSubmit={replyToReply}
+                              className="border-2 border-black"
+                            >
+                              <input type="text" />
+                            </form>
+                          ) : null}
+                        </>
                       ))
                     : null}
                 </div>
