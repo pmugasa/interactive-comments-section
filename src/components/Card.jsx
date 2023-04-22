@@ -2,6 +2,7 @@ import Reply from "./Reply";
 import ButtonIcon from "./ButtonIcon";
 import Button from "./Button";
 import { useState } from "react";
+import ReplyInput from "./ReplyInput";
 
 function Card({
   comment,
@@ -14,6 +15,9 @@ function Card({
   getTimeAgo,
   upVote,
   downVote,
+  showReplyInput,
+  isReply,
+  setIsReply,
 }) {
   const [replies, setReplies] = useState(comment.replies);
   const [editingReply, setEditingReply] = useState(null);
@@ -131,7 +135,7 @@ function Card({
                 </ButtonIcon>
               </div>
             ) : (
-              <ButtonIcon onClick={() => console.log("button clicked")}>
+              <ButtonIcon onClick={() => showReplyInput(comment.id)}>
                 <img src="src\assets\icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply
@@ -141,6 +145,7 @@ function Card({
           </div>
         </div>
       </div>
+
       <div className="pl-4 mt-4 border-l-2 border-gray-150">
         {comment.replies.length > 0
           ? replies.map((reply) => (

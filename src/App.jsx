@@ -1,5 +1,6 @@
 import Card from "./components/Card";
 import CommentInput from "./components/CommentInput";
+import ReplyInput from "./components/ReplyInput";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -9,6 +10,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
+  const [isReply, setIsReply] = useState(null);
 
   //fetching comments from the server
   useEffect(() => {
@@ -134,6 +136,11 @@ function App() {
     });
   }
 
+  //show reply input
+  function showReplyInput(id) {
+    setIsReply(id);
+  }
+
   return (
     <>
       <div className="h-full p-4 bg-background font-rubik">
@@ -142,20 +149,31 @@ function App() {
         ) : (
           <div>
             {comments.map((comment) => (
-              <Card
-                key={comment.id}
-                currentUser={currentUser}
-                comment={comment}
-                deleteComment={deleteComment}
-                handleEditComment={handleEditComment}
-                editingComment={editingComment}
-                setEditingComment={setEditingComment}
-                updateComment={updateComment}
-                setComment={setComment}
-                getTimeAgo={getTimeAgo}
-                upVote={upVote}
-                downVote={downVote}
-              />
+              <>
+                <Card
+                  key={comment.id}
+                  currentUser={currentUser}
+                  comment={comment}
+                  deleteComment={deleteComment}
+                  handleEditComment={handleEditComment}
+                  editingComment={editingComment}
+                  setEditingComment={setEditingComment}
+                  updateComment={updateComment}
+                  setComment={setComment}
+                  getTimeAgo={getTimeAgo}
+                  upVote={upVote}
+                  downVote={downVote}
+                  setIsReply={setIsReply}
+                  isReply={isReply}
+                  showReplyInput={showReplyInput}
+                />
+                {comment.id === isReply ? (
+                  <ReplyInput
+                    currentUser={currentUser}
+                    setIsReply={setIsReply}
+                  />
+                ) : null}
+              </>
             ))}
             <CommentInput
               currentUser={currentUser}
