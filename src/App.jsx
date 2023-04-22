@@ -1,6 +1,7 @@
 import Card from "./components/Card";
 import CommentInput from "./components/CommentInput";
 import ReplyInput from "./components/ReplyInput";
+import Reply from "./components/Reply";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
@@ -11,6 +12,9 @@ function App() {
   const [comment, setComment] = useState("");
   const [editingComment, setEditingComment] = useState(null);
   const [isReply, setIsReply] = useState(null);
+  const [content, setContent] = useState("");
+  const [editingReply, setEditingReply] = useState(null);
+  const [replies, setReplies] = useState(comment.replies);
 
   //fetching comments from the server
   useEffect(() => {
@@ -117,30 +121,92 @@ function App() {
     setEditingComment(null);
   }
 
-  //reply to comment
-  function replyToComment(id) {
-    // need user, timestamp, reply content. id, score
-
-    const updatedReplies = comments.map((comment) => {
-      if (comment.id === id) {
-        return [
-          ...comment.replies,
-          {
-            id: replies.length + 1,
-            content: reply,
-            score: 0,
-            user: user,
-          },
-        ];
-      }
-    });
-  }
-
   //show reply input
   function showReplyInput(id) {
     setIsReply(id);
   }
 
+  //reply to comment
+  function replyToComment(e) {
+    e.preventDefault();
+
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === isReply) {
+        const newReply = {
+          id: comment.replies.length + 1,
+          content: content,
+          createdAt: "now",
+          replyingTo: comment.user.username,
+          user: currentUser,
+          username: currentUser.username,
+        };
+        return { ...comment, replies: [...comment.replies, newReply] };
+      } else {
+        return comment;
+      }
+    });
+    console.log("updated comments:", updatedComments);
+    setComments(updatedComments);
+    setIsReply(null);
+    setContent("");
+  }
+  //downvoting Reply
+  function downVoteReply(id) {
+    const updatedReplies = replies.map((reply) => {
+      if (reply.id === id) {
+        if (reply.score > 0) {
+          return { ...reply, score: reply.score - 1 };
+        }
+        return reply;
+      } else {
+        return reply;
+      }
+    });
+    setReplies(updatedReplies);
+  }
+
+  //upvote Reply
+  function upVoteReply(id) {
+    const updatedReplies = replies.map((reply) => {
+      if (reply.id === id) {
+        return { ...reply, score: reply.score + 1 };
+      } else {
+        return reply;
+      }
+    });
+    setReplies(updatedReplies);
+  }
+
+  //delete reply
+  function deleteReply(id) {
+    const updatedComments = comments.map((comment) => {
+      return {
+        ...comment,
+        replies: comment.replies.filter((reply) => reply.id !== id),
+      };
+    });
+
+    setComments(updatedComments);
+    console.log("to be deleted", id);
+  }
+
+  //edit user comments
+  function handleEditReply(r) {
+    setEditingReply(r);
+  }
+
+  //update edited comment
+  function updateReply() {
+    const updatedReplies = replies.map((reply) => {
+      if (reply.id === editingReply.id) {
+        return { ...reply, content: editingReply.content };
+      } else {
+        return reply;
+      }
+    });
+    setReplies(updatedReplies);
+    setEditingReply(null);
+  }
   return (
     <>
       <div className="h-full p-4 bg-background font-rubik">
@@ -148,7 +214,7 @@ function App() {
           <h1>loading...</h1>
         ) : (
           <div>
-            {comments.map((comment) => (
+            {comments.map((comment, commentIndex) => (
               <>
                 <Card
                   key={comment.id}
@@ -163,24 +229,41 @@ function App() {
                   getTimeAgo={getTimeAgo}
                   upVote={upVote}
                   downVote={downVote}
-                  setIsReply={setIsReply}
-                  isReply={isReply}
                   showReplyInput={showReplyInput}
                 />
                 {comment.id === isReply ? (
                   <ReplyInput
                     currentUser={currentUser}
                     comment={comment}
-                    setComment={setComment}
-                    setIsReply={setIsReply}
-                    getTimeAgo={getTimeAgo}
-                    comments={comments}
-                    setComments={setComments}
                     isReply={isReply}
+                    setContent={setContent}
+                    replyToComment={replyToComment}
                   />
                 ) : null}
+                <div className="pl-4 mt-4 border-l-2 border-gray-150">
+                  {comment.replies.length > 0
+                    ? comment.replies.map((reply, replyIndex) => (
+                        <Reply
+                          key={reply.id}
+                          reply={reply}
+                          currentUser={currentUser}
+                          upVote={upVote}
+                          downVoteReply={downVoteReply}
+                          upVoteReply={upVoteReply}
+                          deleteReply={deleteReply}
+                          handleEditReply={handleEditReply}
+                          setEditingComment={setEditingReply}
+                          editingReply={editingReply}
+                          setEditingReply={setEditingReply}
+                          updateReply={updateReply}
+                          commentIndex={commentIndex}
+                        />
+                      ))
+                    : null}
+                </div>
               </>
             ))}
+
             <CommentInput
               currentUser={currentUser}
               setComment={setComment}

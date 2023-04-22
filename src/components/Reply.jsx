@@ -28,7 +28,7 @@ function Reply({
           <p className="text-gray-400 ">{reply.createdAt}</p>
         </div>
         <div className="mt-4 text-gray-400 text-base">
-          {reply.replyingTo ? (
+          {reply.replyingTo !== null ? (
             <span className="font-bold text-purple mr-1">
               @{reply.replyingTo}
             </span>

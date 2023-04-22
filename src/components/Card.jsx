@@ -1,8 +1,5 @@
-import Reply from "./Reply";
 import ButtonIcon from "./ButtonIcon";
 import Button from "./Button";
-import { useState } from "react";
-import ReplyInput from "./ReplyInput";
 
 function Card({
   comment,
@@ -16,62 +13,7 @@ function Card({
   upVote,
   downVote,
   showReplyInput,
-  isReply,
-  setIsReply,
 }) {
-  const [editingReply, setEditingReply] = useState(null);
-  const [replies, setReplies] = useState(comment.replies);
-  //downvoting Reply
-  function downVoteReply(id) {
-    const updatedReplies = replies.map((reply) => {
-      if (reply.id === id) {
-        if (reply.score > 0) {
-          return { ...reply, score: reply.score - 1 };
-        }
-        return reply;
-      } else {
-        return reply;
-      }
-    });
-    setReplies(updatedReplies);
-  }
-
-  //upvote Reply
-  function upVoteReply(id) {
-    const updatedReplies = replies.map((reply) => {
-      if (reply.id === id) {
-        return { ...reply, score: reply.score + 1 };
-      } else {
-        return reply;
-      }
-    });
-    setReplies(updatedReplies);
-  }
-
-  //delete reply
-  function deleteReply(id) {
-    const updatedReplies = replies.filter((reply) => reply.id !== id);
-    setReplies(updatedReplies);
-  }
-
-  //edit user comments
-  function handleEditReply(r) {
-    setEditingReply(r);
-  }
-  console.log("edited reply", editingReply);
-  //update edited comment
-  function updateReply() {
-    const updatedReplies = replies.map((reply) => {
-      if (reply.id === editingReply.id) {
-        return { ...reply, content: editingReply.content };
-      } else {
-        return reply;
-      }
-    });
-    setReplies(updatedReplies);
-    setEditingReply(null);
-  }
-
   return (
     <>
       <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
@@ -143,27 +85,6 @@ function Card({
             )}
           </div>
         </div>
-      </div>
-
-      <div className="pl-4 mt-4 border-l-2 border-gray-150">
-        {comment.replies.length > 0
-          ? replies.map((reply) => (
-              <Reply
-                key={reply.id}
-                reply={reply}
-                currentUser={currentUser}
-                upVote={upVote}
-                downVoteReply={downVoteReply}
-                upVoteReply={upVoteReply}
-                deleteReply={deleteReply}
-                handleEditReply={handleEditReply}
-                setEditingComment={setEditingReply}
-                editingReply={editingReply}
-                setEditingReply={setEditingReply}
-                updateReply={updateReply}
-              />
-            ))
-          : null}
       </div>
     </>
   );
