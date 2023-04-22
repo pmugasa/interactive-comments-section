@@ -31,7 +31,7 @@ function App() {
     fetchData();
   }, []);
 
-  //upvoting
+  //upvoting comment
   function upVote(id) {
     const updatedComments = comments.map((comment) => {
       if (comment.id === id) {
@@ -48,7 +48,6 @@ function App() {
     const updatedComments = comments.map((comment) => {
       if (comment.id === id) {
         if (comment.score > 0) {
-          console.log("score", comment.score);
           return { ...comment, score: comment.score - 1 };
         }
         return comment;
@@ -135,7 +134,8 @@ function App() {
         const newReply = {
           id: comment.replies.length + 1,
           content: content,
-          createdAt: "now",
+          score: 0,
+          createdAt: Date.now(),
           replyingTo: comment.user.username,
           user: currentUser,
           username: currentUser.username,
@@ -152,29 +152,36 @@ function App() {
   }
   //downvoting Reply
   function downVoteReply(id) {
-    const updatedReplies = replies.map((reply) => {
-      if (reply.id === id) {
-        if (reply.score > 0) {
-          return { ...reply, score: reply.score - 1 };
-        }
-        return reply;
-      } else {
-        return reply;
-      }
+    const updatedComments = comments.map((comment) => {
+      return {
+        ...comment,
+        replies: comment.replies.map((reply) => {
+          if (reply.id === id) {
+            return { ...reply, score: reply.score - 1 };
+          } else {
+            return reply;
+          }
+        }),
+      };
     });
-    setReplies(updatedReplies);
+    setComments(updatedComments);
   }
 
   //upvote Reply
   function upVoteReply(id) {
-    const updatedReplies = replies.map((reply) => {
-      if (reply.id === id) {
-        return { ...reply, score: reply.score + 1 };
-      } else {
-        return reply;
-      }
+    const updatedComments = comments.map((comment) => {
+      return {
+        ...comment,
+        replies: comment.replies.map((reply) => {
+          if (reply.id === id) {
+            return { ...reply, score: reply.score + 1 };
+          } else {
+            return reply;
+          }
+        }),
+      };
     });
-    setReplies(updatedReplies);
+    setComments(updatedComments);
   }
 
   //delete reply
@@ -187,7 +194,6 @@ function App() {
     });
 
     setComments(updatedComments);
-    console.log("to be deleted", id);
   }
 
   //edit user comments
@@ -214,7 +220,7 @@ function App() {
           <h1>loading...</h1>
         ) : (
           <div>
-            {comments.map((comment, commentIndex) => (
+            {comments.map((comment) => (
               <>
                 <Card
                   key={comment.id}
@@ -242,7 +248,7 @@ function App() {
                 ) : null}
                 <div className="pl-4 mt-4 border-l-2 border-gray-150">
                   {comment.replies.length > 0
-                    ? comment.replies.map((reply, replyIndex) => (
+                    ? comment.replies.map((reply) => (
                         <Reply
                           key={reply.id}
                           reply={reply}
@@ -256,7 +262,7 @@ function App() {
                           editingReply={editingReply}
                           setEditingReply={setEditingReply}
                           updateReply={updateReply}
-                          commentIndex={commentIndex}
+                          getTimeAgo={getTimeAgo}
                         />
                       ))
                     : null}

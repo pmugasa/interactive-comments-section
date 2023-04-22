@@ -10,6 +10,7 @@ function Reply({
   setEditingReply,
   editingReply,
   updateReply,
+  getTimeAgo,
 }) {
   return (
     <>
@@ -25,7 +26,7 @@ function Reply({
             </p>
           ) : null}
 
-          <p className="text-gray-400 ">{reply.createdAt}</p>
+          <p className="text-gray-400 ">{getTimeAgo(reply.createdAt)}</p>
         </div>
         <div className="mt-4 text-gray-400 text-base">
           {reply.replyingTo !== null ? (
