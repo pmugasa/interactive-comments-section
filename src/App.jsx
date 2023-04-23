@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get("/src/data/data.json");
+        const result = await axios.get("./src/data.json");
         setComments(result.data.comments);
         setCurrentUser(result.data.currentUser);
         setIsLoading(false);
