@@ -3,6 +3,7 @@ import CommentInput from "./components/CommentInput";
 import ReplyInput from "./components/ReplyInput";
 import Reply from "./components/Reply";
 import axios from "axios";
+import data from "./data.json";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -17,11 +18,12 @@ function App() {
   const [replies, setReplies] = useState(comment.replies);
   const [showInput, setShowInput] = useState(null);
 
+  console.log(data);
   //fetching comments from the server
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get("./data.json");
+        const result = await axios.get("./src/data.json");
         setComments(result.data.comments);
         setCurrentUser(result.data.currentUser);
         setIsLoading(false);
