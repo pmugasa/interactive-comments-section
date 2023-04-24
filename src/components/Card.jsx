@@ -21,7 +21,11 @@ function Card({
           <img src={comment.user.image.webp} className="h-6 w-6" />
           <p className="font-bold  text-gray-600 ">{comment.user.username}</p>
 
-          <p className="text-gray-400">{getTimeAgo(comment.createdAt)}</p>
+          <p className="text-gray-400">
+            {typeof comment.createdAt === "string"
+              ? comment.createdAt
+              : getTimeAgo(comment.createdAt)}
+          </p>
         </div>
 
         {editingComment && editingComment.id === comment.id ? (
@@ -48,12 +52,12 @@ function Card({
         <div className="flex mt-4">
           <div className="flex space-x-4 ">
             <button onClick={() => downVote(comment.id)}>
-              <img src="/assets/icon-minus.svg" />
+              <img src="/assets/images/icon-minus.svg" />
             </button>
 
             <span className="font-semibold text-purple">{comment.score}</span>
             <button onClick={() => upVote(comment.id)}>
-              <img src="/assets/icon-plus.svg" />
+              <img src="/assets/images/icon-plus.svg" />
             </button>
           </div>
           <div className=" ml-auto">
@@ -63,7 +67,7 @@ function Card({
                   onClick={() => deleteComment(comment.id)}
                   className="text-softRed"
                 >
-                  <img src="/assets/icon-delete.svg" />
+                  <img src="/assets/images/icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </ButtonIcon>
                 <ButtonIcon
@@ -71,13 +75,13 @@ function Card({
                   className=" text-purple"
                   onClick={() => handleEditComment(comment)}
                 >
-                  <img src="/assets/icon-edit.svg" />
+                  <img src="/assets/images/icon-edit.svg" />
                   <span className="font-semibold  ">Edit</span>
                 </ButtonIcon>
               </div>
             ) : (
               <ButtonIcon onClick={() => showReplyInput(comment.id)}>
-                <img src="/assets/icon-reply.svg" />
+                <img src="/assets/images/icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply
                 </span>
