@@ -61,20 +61,6 @@
             },
             "username": "juliusomo"
           }
-        },
-        {
-          "id": 3,
-          "content": " It's very tempting to jump ahead but lay a solid foundation first.",
-          "createdAt": 1649989012345,
-          "score": 3,
-          "replyingTo": "maxblagun",
-          "user": {
-            "image": {
-              "png": "./src/assets/avatars/image-ramsesmiron.png",
-              "webp": "./src/assets/avatars/image-ramsesmiron.webp"
-            },
-            "username": "ramsesmiron"
-          }
         }
       ]
     }

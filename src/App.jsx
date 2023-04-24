@@ -3,6 +3,7 @@ import CommentInput from "./components/CommentInput";
 import ReplyInput from "./components/ReplyInput";
 import Reply from "./components/Reply";
 import axios from "axios";
+import Button from "./components/Button";
 
 import { useState, useEffect } from "react";
 
@@ -22,7 +23,7 @@ function App() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get("./src/data.json");
+        const result = await axios.get("/src/data.json");
         setComments(result.data.comments);
         setCurrentUser(result.data.currentUser);
         setIsLoading(false);
@@ -84,17 +85,16 @@ function App() {
     e.preventDefault();
     //comment should have the following
     //username, user image, createdAt, content, score, id
-    setComments((prevComment) => [
-      ...prevComment,
-      {
-        id: comments.length + 1,
-        content: comment,
-        createdAt: Date.now(),
-        score: 0,
-        user: currentUser,
-        replies: [],
-      },
-    ]);
+    const data = {
+      id: comments.length + 1,
+      content: comment,
+      createdAt: Date.now(),
+      score: 0,
+      user: currentUser,
+      replies: [],
+    };
+
+    setComments((prevComment) => [...prevComment, data]);
     setComment("");
   }
 
@@ -142,6 +142,9 @@ function App() {
           user: currentUser,
           username: currentUser.username,
         };
+        axios.post(newReply).then((result) => {
+          console.log(result);
+        });
         return { ...comment, replies: [...comment.replies, newReply] };
       } else {
         return comment;
@@ -155,14 +158,13 @@ function App() {
 
   //show reply input to reply
   function showInputReply(id) {
-    console.log(id);
     setShowInput(id);
   }
   //reply to another user reply
   function replyToReply(e) {
     e.preventDefault();
 
-    const updatedComments = comments.map((comment) => {
+    const updatedComments = comments.forEach((comment) => {
       comment.replies.map((reply) => {
         if (reply.id === isReply) {
           const newReply = {
@@ -174,14 +176,16 @@ function App() {
             user: currentUser,
             username: currentUser.username,
           };
+
           return { ...comment, replies: [...comment.replies, newReply] };
         } else {
           return comment;
         }
       });
     });
-    setComments(updatedComments);
-    setIsReply(null);
+
+    alert("🙇🏾‍♂️ this feature is still under development");
+    setShowInput(null);
     setContent("");
   }
 
@@ -248,82 +252,92 @@ function App() {
     setReplies(updatedReplies);
     setEditingReply(null);
   }
+  if (isLoading) {
+    return <h1>Fetching comments...</h1>;
+  }
   return (
     <>
-      <div className="h-full p-4 bg-background font-rubik">
-        {isLoading ? (
-          <h1>loading...</h1>
-        ) : (
-          <div>
-            {comments.map((comment) => (
-              <>
-                <Card
-                  key={comment.id}
+      <div className="h-screen w-screen overflow-auto md:px-40 p-4 bg-background font-rubik">
+        <div>
+          {comments.map((comment) => (
+            <>
+              <Card
+                //key={comment.id}
+                currentUser={currentUser}
+                comment={comment}
+                deleteComment={deleteComment}
+                handleEditComment={handleEditComment}
+                editingComment={editingComment}
+                setEditingComment={setEditingComment}
+                updateComment={updateComment}
+                setComment={setComment}
+                getTimeAgo={getTimeAgo}
+                upVote={upVote}
+                downVote={downVote}
+                showReplyInput={showReplyInput}
+              />
+              {comment.id === isReply ? (
+                <ReplyInput
                   currentUser={currentUser}
                   comment={comment}
-                  deleteComment={deleteComment}
-                  handleEditComment={handleEditComment}
-                  editingComment={editingComment}
-                  setEditingComment={setEditingComment}
-                  updateComment={updateComment}
-                  setComment={setComment}
-                  getTimeAgo={getTimeAgo}
-                  upVote={upVote}
-                  downVote={downVote}
-                  showReplyInput={showReplyInput}
+                  isReply={isReply}
+                  setContent={setContent}
+                  replyToComment={replyToComment}
                 />
-                {comment.id === isReply ? (
-                  <ReplyInput
-                    currentUser={currentUser}
-                    comment={comment}
-                    isReply={isReply}
-                    setContent={setContent}
-                    replyToComment={replyToComment}
-                  />
-                ) : null}
-                <div className="pl-4 mt-4 border-l-2 border-gray-150">
-                  {comment.replies.length > 0
-                    ? comment.replies.map((reply) => (
-                        <>
-                          <Reply
-                            key={reply.id}
-                            reply={reply}
-                            currentUser={currentUser}
-                            upVote={upVote}
-                            downVoteReply={downVoteReply}
-                            upVoteReply={upVoteReply}
-                            deleteReply={deleteReply}
-                            handleEditReply={handleEditReply}
-                            setEditingComment={setEditingReply}
-                            editingReply={editingReply}
-                            setEditingReply={setEditingReply}
-                            updateReply={updateReply}
-                            getTimeAgo={getTimeAgo}
-                            showInputReply={showInputReply}
-                          />
-                          {reply.id === showInput ? (
-                            <form
-                              onSubmit={replyToReply}
-                              className="border-2 border-black"
-                            >
-                              <input type="text" />
-                            </form>
-                          ) : null}
-                        </>
-                      ))
-                    : null}
-                </div>
-              </>
-            ))}
+              ) : null}
+              <div className="pl-4 mt-4 border-l-2 border-gray-150">
+                {comment.replies.length > 0
+                  ? comment.replies.map((reply) => (
+                      <>
+                        <Reply
+                          key={reply.id}
+                          reply={reply}
+                          currentUser={currentUser}
+                          upVote={upVote}
+                          downVoteReply={downVoteReply}
+                          upVoteReply={upVoteReply}
+                          deleteReply={deleteReply}
+                          handleEditReply={handleEditReply}
+                          setEditingComment={setEditingReply}
+                          editingReply={editingReply}
+                          setEditingReply={setEditingReply}
+                          updateReply={updateReply}
+                          getTimeAgo={getTimeAgo}
+                          showInputReply={showInputReply}
+                        />
+                        {reply.id === showInput ? (
+                          <div className="h-fit w-full border-2 border-gray-100 shadow-sm font-rubik text-sm bg-white mt-4 rounded-lg p-4">
+                            <form onSubmit={replyToReply}>
+                              <input
+                                type="text"
+                                onChange={(e) => setContent(e.target.value)}
+                                className="border-2 border-gray-200 h-28 w-full rounded-lg p-4 font-rubik text-gray-400 focus:outline-purple"
+                              />
+                              <div className="flex items-center mt-4">
+                                <img
+                                  src={currentUser.image.webp}
+                                  className="h-8 w-8"
+                                />
 
-            <CommentInput
-              currentUser={currentUser}
-              setComment={setComment}
-              addComment={addComment}
-              comment={comment}
-            />
-          </div>
-        )}
+                                <Button type="submit">REPLY</Button>
+                              </div>
+                            </form>
+                          </div>
+                        ) : null}
+                      </>
+                    ))
+                  : null}
+              </div>
+            </>
+          ))}
+
+          <CommentInput
+            currentUser={currentUser}
+            setComment={setComment}
+            addComment={addComment}
+            comment={comment}
+          />
+        </div>
       </div>
     </>
   );

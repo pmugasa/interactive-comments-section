@@ -46,7 +46,7 @@ function Card({
         )}
 
         <div className="flex mt-4">
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 ">
             <button onClick={() => downVote(comment.id)}>
               <img src="src\assets\icon-minus.svg" />
             </button>
