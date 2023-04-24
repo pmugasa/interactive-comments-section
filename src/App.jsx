@@ -4,6 +4,7 @@ import ReplyInput from "./components/ReplyInput";
 import Reply from "./components/Reply";
 import axios from "axios";
 import Button from "./components/Button";
+import data from "./data.json";
 
 import { useState, useEffect } from "react";
 
@@ -19,11 +20,18 @@ function App() {
   const [replies, setReplies] = useState(comment.replies);
   const [showInput, setShowInput] = useState(null);
 
-  //fetching comments from the server
   useEffect(() => {
+    console.log(data.currentUser);
+    setComments(data.comments);
+    setCurrentUser(data.currentUser);
+    setIsLoading(false);
+  }, []);
+
+  //fetching comments from the server
+  /*useEffect(() => {
     async function fetchData() {
       try {
-        const result = await axios.get("src\\data.json");
+        const result = await axios.get("../data.json");
         setComments(result.data.comments);
         setCurrentUser(result.data.currentUser);
         setIsLoading(false);
@@ -32,7 +40,7 @@ function App() {
       }
     }
     fetchData();
-  }, []);
+  }, []);*/
 
   //upvoting comment
   function upVote(id) {
