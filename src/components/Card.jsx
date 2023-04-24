@@ -48,12 +48,12 @@ function Card({
         <div className="flex mt-4">
           <div className="flex space-x-4 ">
             <button onClick={() => downVote(comment.id)}>
-              <img src="src\assets\icon-minus.svg" />
+              <img src="/assets/icon-minus.svg" />
             </button>
 
             <span className="font-semibold text-purple">{comment.score}</span>
             <button onClick={() => upVote(comment.id)}>
-              <img src="src\assets\icon-plus.svg" />
+              <img src="/assets/icon-plus.svg" />
             </button>
           </div>
           <div className=" ml-auto">
@@ -63,7 +63,7 @@ function Card({
                   onClick={() => deleteComment(comment.id)}
                   className="text-softRed"
                 >
-                  <img src="src\assets\icon-delete.svg" />
+                  <img src="/assets/icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </ButtonIcon>
                 <ButtonIcon
@@ -71,13 +71,13 @@ function Card({
                   className=" text-purple"
                   onClick={() => handleEditComment(comment)}
                 >
-                  <img src="src\assets\icon-edit.svg" />
+                  <img src="/assets/icon-edit.svg" />
                   <span className="font-semibold  ">Edit</span>
                 </ButtonIcon>
               </div>
             ) : (
               <ButtonIcon onClick={() => showReplyInput(comment.id)}>
-                <img src="src\assets\icon-reply.svg" />
+                <img src="/assets/icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply
                 </span>

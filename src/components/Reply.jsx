@@ -59,14 +59,14 @@ function Reply({
         <div className="flex mt-4">
           <div className="flex space-x-4">
             <button onClick={() => downVoteReply(reply.id)}>
-              <img src="src\assets\icon-minus.svg" />
+              <img src="/assets/icon-minus.svg" />
             </button>
 
             <span className="font-semibold text-purple text-base">
               {reply.score}
             </span>
             <button onClick={() => upVoteReply(reply.id)}>
-              <img src="src\assets\icon-plus.svg" />
+              <img src="/assets/icon-plus.svg" />
             </button>
           </div>
           <div className=" ml-auto">
@@ -76,14 +76,14 @@ function Reply({
                   onClick={() => deleteReply(reply.id)}
                   className="flex items-center justify-center text-softRed space-x-2"
                 >
-                  <img src="src\assets\icon-delete.svg" />
+                  <img src="/assets/icon-delete.svg" />
                   <span className="font-semibold ">Delete</span>
                 </button>
                 <button
                   onClick={() => handleEditReply(reply)}
                   className="flex items-center justify-center  text-purple space-x-2"
                 >
-                  <img src="src\assets\icon-edit.svg" />
+                  <img src="/assets/icon-edit.svg" />
                   <span className="font-semibold  ">Edit</span>
                 </button>
               </div>
@@ -92,7 +92,7 @@ function Reply({
                 className="flex items-center justify-center space-x-2"
                 onClick={() => showInputReply(reply.id)}
               >
-                <img src="src\assets\icon-reply.svg" />
+                <img src="/assets/icon-reply.svg" />
                 <span className="font-semibold text-purple text-base">
                   Reply
                 </span>
